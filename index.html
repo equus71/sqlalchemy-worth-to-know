@@ -86,7 +86,7 @@
           Column('name', String(length=64), nullable=False))
 
 class User(Base):
-    __tabla__ = user_table
+    __table__ = user_table
 
     name = user_table.c.name</pre>
                         </code>
