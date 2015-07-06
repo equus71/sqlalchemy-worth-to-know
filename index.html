@@ -265,10 +265,19 @@ class InProgressOrder(Order):
 
                 <section>
 					<h3>
-                        Optymalizacja skomplikowanych query poprzez aliasy
+                        Aliasowanie
                     </h3>
                     <p>
-                        przyklad tego query co kiedys aliasowalismy
+                        <code><pre>
+from sqlalchemy.orm import aliased
+adalias1 = aliased(Address)
+adalias2 = aliased(Address)
+session.query(User).\
+    join(adalias1, User.addresses).\
+    join(adalias2, User.addresses).\
+    filter(adalias1.email_address=='jack@google.com').\
+    filter(adalias2.email_address=='j25@yahoo.com')
+</pre></code>
                     </p>
 				</section>
 
