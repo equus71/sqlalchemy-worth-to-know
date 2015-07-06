@@ -80,7 +80,7 @@
                 <section>
                     <h3>deklaratywne</h3>
 					<p>
-                        <code>
+                        <code >
 <pre>user_table = Table('USER', Metadata
           Column('id', Integer, primary_key=True, nullable=False),
           Column('name', String(length=64), nullable=False))
@@ -119,7 +119,7 @@ mapper(User, user_table)</pre>
                 <section>
 					<h3>deklaratywne</h3>
 					<p>
-                        <code>
+                        <code style="font-size: 125%; line-height: 120%;">
 <pre>class User(Base):
     __tabla__ = user_table
 
@@ -134,10 +134,29 @@ class Task(Base):
 <section>
 					<h3>klasyczne</h3>
 					<p>
-                        <code>
+                        <code style="font-size: 125%; line-height: 120%;">
 <pre>mapper(User, user_table, properties={
     'tasks' : relationship(Task, backref='user')
 })</pre>
+                        </code>
+                    </p>
+				</section>
+
+                <section>
+					<h2>
+                        Pobieranie obiektów
+                    </h2>
+				</section>
+
+                <section>
+					<p>
+                        <code style="font-size: 125%; line-height: 120%;">
+<pre>session
+    .query(Klasa_pobieranego_obiektu)
+    .join(Inna_klasa)
+    .filter(Inna_klasa.atrybut == wartosc)
+    .all()
+</pre>
                         </code>
                     </p>
 				</section>
@@ -170,11 +189,13 @@ class Task(Base):
 
                 <section>
                     <p>
-                        <code>
+                        <code style="font-size: 125%; line-height: 120%;">
 <pre>base_product_table = [...]
 specialization_table = [...]
 
-product_join = join(base_product_table, specialization_table)
+product_join = join(
+    base_product_table,
+    specialization_table)
 
 class Product(Base):
     __table__ = product_join
@@ -197,11 +218,11 @@ class Product(Base):
 
                 <section>
 					<p>
-                        <code>
+                        <code style="font-size: 115%; line-height: 110%;">
 <pre>class Order(Base):
-    __table__ = order_tabel
-    id = order_tabel.c.id
-    state = order_tabel.c.state
+    __table__ = order_table
+    id = order_table.c.id
+    state = order_table.c.state
     [...]
 
     __mapper_args__ = {
@@ -247,6 +268,22 @@ class InProgressOrder(Order):
                         <code>
                         session.query(User)<br/>
                         <span class="fragment">.options(</span><br/><span class="fragment">joinedload(User.tasks)</span><br/><span class="fragment">.joinedload(Task.project))</span><br/><span class="fragment">.filter([...]).first()</span>
+                            </code>
+                    </h3>
+				</section>
+
+                <section>
+					<h3>
+                        Eager loading vs. lazy loading
+                    </h3>
+                    <h2>subqueryload</h2>
+				</section>
+
+                <section>
+					<h3>
+                        <code>
+                        session.query(User)<br/>
+                        .options(<br/><span style="color: #6c71c4">subquery</span>(User.tasks)<br/>.joinedload(Task.project))<br/>.filter([...]).first()
                             </code>
                     </h3>
 				</section>
