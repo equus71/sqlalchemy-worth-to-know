@@ -55,37 +55,90 @@
 					</p>
 				</section>
 
+                <section data-background-image="data/sky-earth-galaxy-universe.s.jpg">
+					<h1 style="text-decoration:line-through; text-shadow: 3px 3px 3px #000000">
+                        <span> Hello World </span>
+                    </h1>
+				</section>
+
+                <section>
+                    <h3>SqlAlchemy</h3>
+                    <ul>
+                        <li class="fragment">ORM</li>
+                        <li class="fragment">wspomaga pracę z czystym SQLem</li>
+                        <li class="fragment">wspiera wiele różnych baz danych</li>
+                        <li class="fragment">dostarcza wiele wzorców (identity map, unit of work, dziedziczenia, etc.) </li>
+                    </ul>
+				</section>
+
                 <section>
 					<h2>
-                        Intro != tutorial
+                        Mapowanie
                     </h2>
-                    <p>
+				</section>
 
+                <section>
+                    <h3>deklaratywne</h3>
+					<p>
+                        <code>
+<pre>user_table = Table('USER', Metadata
+          Column('id', Integer, primary_key=True, nullable=False),
+          Column('name', String(length=64), nullable=False))
+
+class User(Base):
+    __tabla__ = user_table
+
+    name = user_table.c.name</pre>
+                        </code>
                     </p>
 				</section>
 
                 <section>
-                    <p>
-Celem intro jest przedstawienie ogólnie, co to jest SqlAlchemy i do czego służy tym, którzy nie mają zielonego pojęcia o czym jest.
-Z zaznaczeniem, że to nie ma być tutorial. Każdy czytać umie i tutoriale przeczyta sam.
+                    <h3>klasyczne</h3>
+					<p>
+                        <code>
+<pre>user_table = Table('USER', Metadata,
+          Column('id', Integer, primary_key=True, nullable=False),
+          Column('name', String(length=64), nullable=False))
+
+class User(Base):
+    def __init__(self, name:
+        self.name = name
+
+mapper(User, user_table)</pre>
+                        </code>
                     </p>
 				</section>
 
                 <section>
-					<h3>
-                        Podstawy działania
-                    </h3>
-                    <p>
-                        definiowanie modelu, tabel, relacji, mapperów
-                    </p>
+					<h2>
+                        Relacje
+                    </h2>
 				</section>
 
                 <section>
-					<h3>
-                        Podstawy działania
-                    </h3>
-                    <p>
-                        jakiś krótki przykład, może coś co można pociągnąć dalej
+					<h3>deklaratywne</h3>
+					<p>
+                        <code>
+<pre>class User(Base):
+    __tabla__ = user_table
+
+    tasks = relationship('Task', backref='user')
+
+class Task(Base):
+    ...</pre>
+                        </code>
+                    </p>
+				</section>
+
+<section>
+					<h3>klasyczne</h3>
+					<p>
+                        <code>
+<pre>mapper(User, user_table, properties={
+    'tasks' : relationship(Task, backref='user')
+})</pre>
+                        </code>
                     </p>
 				</section>
 
@@ -93,59 +146,120 @@ Z zaznaczeniem, że to nie ma być tutorial. Każdy czytać umie i tutoriale prz
 					<h3>
                         Dlaczego w ogóle SqlAlchemy?
                     </h3>
-                    <p>
-                    apropo tego ze ORM moze byc rozpatrywany jako antipatern
+                    <p class="fragment">
+                    ORM może być rozpatrywany jako anty-wzorzec
                     </p>
 				</section>
 
-                <section>
-					<h3>
+                <section data-background-image="data/construction-work-carpenter-tools.s.jpg">
+					<h2 style="text-shadow: 3px 3px 3px #000000">
                         Co warto wiedzieć o SqlAlchemy?
-                    </h3>
+                    </h2>
 				</section>
 
                 <section>
 					<h3>
-                        Mapowanie klas abstrakcyjnych i konkretnych klas abstrakcyjnych
+                        Mapowanie z...
                     </h3>
+                    <h3>
+                        <span class="fragment">tabeli</span>
+                        <span class="fragment">, połączenia tabeli</span>
+                        <span class="fragment">, widoku</span>
+                    </h3>
+				</section>
+
+                <section>
                     <p>
-                        Da się zrobić mapowanie klas, w tym klas abstrakcyjnych i mapowanie klasy z różnych tabel.
+                        <code>
+<pre>base_product_table = [...]
+specialization_table = [...]
+
+product_join = join(base_product_table, specialization_table)
+
+class Product(Base):
+    __table__ = product_join
+
+    [...]</pre>
+                        </code>
                     </p>
 				</section>
 
                 <section>
 					<h3>
-                        Eager loading -- contains_eager
+                        Dziedziczenie
                     </h3>
-                    <p>
-                        Wczesne ładowanie na podstawie dostępnych informacji w zapytaniu.
+                    <ul>
+                        <li class="fragment">z jednej tabeli</li>
+                        <li class="fragment">z wielu tabel</li>
+                        <li class="fragment">z połączenia tabel</li>
+                    </ul>
+				</section>
+
+                <section>
+					<p>
+                        <code>
+<pre>class Order(Base):
+    __table__ = order_tabel
+    id = order_tabel.c.id
+    state = order_tabel.c.state
+    [...]
+
+    __mapper_args__ = {
+        'polymorphic_on': state
+    }
+
+class InProgressOrder(Order):
+    [...]
+    __mapper_args__ = {
+        'polymorphic_identity': 'INPROGRESS',
+    }</pre>
+                        </code>
                     </p>
 				</section>
 
                 <section>
 					<h3>
-                        Eager loading -- joinload
+                        Dziedziczenie z wielu tabel
                     </h3>
-                    <p>
-                        Wczesne ładowanie na podstawie zadanych kryteriów.
+				</section>
+
+                <section>
+					<h3>
+                        Eager loading vs. lazy loading
+                    </h3>
+                    <h2>joinedload</h2>
+                    <!--<p>-->
+                        <!--Wczesne ładowanie na podstawie zadanych kryteriów.-->
+                    <!--</p>-->
+				</section>
+
+                <section>
+					<h3>
+                        <code> [task for task in user.tasks <br> if task.project.code == project_code ]</code>
+                    </h3>
+                    <p class="fragment">
+                        Domyślnie z powodu na <em>lazy loading</em> wykonanie tego fragmentu wiązałoby się z wieloma zapytaniami do bazy danych.
                     </p>
 				</section>
 
                 <section>
 					<h3>
-                        Association proxy
+                        <code>
+                        session.query(User)<br/>
+                        <span class="fragment">.options(</span><br/><span class="fragment">joinedload(User.tasks)</span><br/><span class="fragment">.joinedload(Task.project))</span><br/><span class="fragment">.filter([...]).first()</span>
+                            </code>
                     </h3>
-                    <p>
-                        Przenoszenie własności między obiektami. Możliwość zasłonięcia całego obiekty poprzez właściwość.
-                    </p>
 				</section>
 
                 <section>
-					<h3>
-                        Mapowanie z połączenia tabel
+                    <h3>
+                        Eager loading vs. lazy loading
                     </h3>
+					<h2>
+                        contains_eager
+                    </h2>
                     <p>
-                        Mapowanie z czegokolwiek tak na prawdę.
+                        Wczesne ładowanie na podstawie danych dostępnych w wyniku zapytaniu.
                     </p>
 				</section>
 
@@ -156,6 +270,12 @@ Z zaznaczeniem, że to nie ma być tutorial. Każdy czytać umie i tutoriale prz
                     <p>
                         przyklad tego query co kiedys aliasowalismy
                     </p>
+				</section>
+
+                <section>
+					<h3>
+                        Association proxy
+                    </h3>
 				</section>
 
                 <section>
