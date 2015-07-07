@@ -309,13 +309,13 @@ class InProgressOrder(Order):
                 <section>
                     <h4>
                         <code>
-                        session.query(User)<br/>
+                        user = session.query(User)<br/>
                             .join(User.tasks)<br/>
                             .options(<span style="color: #6c71c4;">contains_eager(User.tasks)</span>)<br/>
                             .filter(User.id == user_id,<br/> Task.state == state)<br/>
                             .first()
                             </code><br/>
-                        Wynik?
+                        <span class="fragment">Co będzie w <em>user.tasks</em>?</span>
                     </h4>
 				</section>
 
