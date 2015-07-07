@@ -246,6 +246,12 @@ class InProgressOrder(Order):
 
                 <section>
 					<h3>
+                        Dziedziczenie z połączenia tabel
+                    </h3>
+				</section>
+
+                <section>
+					<h3>
                         Eager loading vs. lazy loading
                     </h3>
                     <h2>joinedload</h2>
@@ -301,6 +307,19 @@ class InProgressOrder(Order):
 				</section>
 
                 <section>
+                    <h4>
+                        <code>
+                        session.query(User)<br/>
+                            .join(User.tasks)<br/>
+                            .options(<span style="color: #6c71c4;">contains_eager(User.tasks)</span>)<br/>
+                            .filter(User.id == user_id,<br/> Task.state == state)<br/>
+                            .first()
+                            </code><br/>
+                        Wynik?
+                    </h4>
+				</section>
+
+                <section>
 					<h3>
                         Aliasowanie
                     </h3>
@@ -322,14 +341,23 @@ session.query(User).\
 					<h3>
                         Association proxy
                     </h3>
+                    <p>Przenoszenie atrybutów między obiektami będącymi w relacji</p>
 				</section>
 
                 <section>
-					<h3>
-                        Rzemiosło
-                    </h3>
-                    <p>
-                        W SqlAlchemy trzeba dużo pracy wykonać własnoręcznie
+					<p>
+                        <code style="font-size: 125%; line-height: 120%;">
+<pre>class Project(Base):
+    [...]
+    codename = project_table.c.codename
+    task = relationship('Task', backref='project')
+
+class Task(Base):
+    [...]
+    project_codename
+        = association_proxy('project', 'codename')
+</pre>
+                        </code>
                     </p>
 				</section>
 
@@ -337,10 +365,20 @@ session.query(User).\
 					<h3>
                         Stack trace
                     </h3>
-                    <p>
-                        Przykład nieużytecznego stack trace, który nijak się ma do problemu
-                    </p>
+                    <h2 class="fragment">
+                        Arrrggg...
+                    </h2>
 				</section>
+
+                <section>
+                    <h2>Podsumowanie</h2>
+                    <ul>
+                        <li class="fragment">daje dużo możliwości/bardzo elastyczne</li>
+                        <li class="fragment">pozwala wykorzystać zalety relacyjnej bazy danych w obiektowym świecie</li>
+                        <li class="fragment">pozwala zbudować w model obiektowy na bazie danych relacyjnych</li>
+                        <li class="fragment">wymaga dużo pracy</li>
+                    </ul>
+                </section>
 
                 <section>
 					<h1>Dzięki za uwagę!</h1>
